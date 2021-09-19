@@ -1,5 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
+const express = require('express');
 
 const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
@@ -43,6 +44,10 @@ module.exports = {
 				]
 			},
 			{
+				test: /\.(woff|woff2|eot|ttf|otf)$/i,
+				type: "asset/inline",
+			  },
+			{
 				// required to prevent errors from Svelte on Webpack 5+
 				test: /node_modules\/svelte\/.*\.mjs$/,
 				resolve: {
@@ -59,6 +64,25 @@ module.exports = {
 	],
 	devtool: prod ? false : 'source-map',
 	devServer: {
-		hot: true
-	}
+		contentBase: './public',
+		hot: true,
+		historyApiFallback: true,
+		setup (app) {
+			app.use('/assets/img/',
+				express.static('/assets/img/'));
+			app.use('/assets/css/',
+				express.static('/assets/css/'));
+			app.use('/assets/css/boxicons/',
+				express.static('/assets/css/boxicons/'));
+			app.use('/assets/img/portfolio',
+				express.static('/assets/img/portfolio'));
+			app.use('/assets/img/testimonials',
+				express.static('/assets/img/testimonials'));
+		/* Using this commented code will break the HMR, see edit
+		  app.use('/static/js/',
+			express.static(path.join(__dirname, 'dist', 'static', 'js')));
+		  */
+		  
+		}
+	  }
 };
