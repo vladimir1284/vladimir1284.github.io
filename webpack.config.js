@@ -1,9 +1,16 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const PurgecssPlugin = require('purgecss-webpack-plugin')
 const path = require('path');
+const glob = require('glob')
 const express = require('express');
 
 const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
+
+const PATHS = {
+	src: path.join(__dirname, 'src')
+  }
+  
 
 module.exports = {
 	entry: {
@@ -60,6 +67,9 @@ module.exports = {
 	plugins: [
 		new MiniCssExtractPlugin({
 			filename: '[name].css'
+		}),
+		new PurgecssPlugin({
+		  paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
 		})
 	],
 	devtool: prod ? false : 'source-map',
