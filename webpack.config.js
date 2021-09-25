@@ -68,9 +68,9 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: '[name].css'
 		}),
-		new PurgecssPlugin({
-		  paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
-		})
+		// new PurgecssPlugin({
+		//   paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
+		// })
 	],
 	devtool: prod ? false : 'source-map',
 	devServer: {
